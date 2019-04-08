@@ -49,6 +49,8 @@ configure_file(run_nvm_dragonhawk.sh run_nvm_dragonhawk.sh COPYONLY)
 configure_file(run_nvm.sh run_nvm.sh COPYONLY)
 
 # For HCC experiments
+configure_file(run_hcc_aws.sh run_hcc_aws.sh COPYONLY)
+configure_file(yihe_runs_hcc.sh yihe_runs_hcc.sh COPYONLY)
 configure_file(run_hcc_z820.sh run_hcc_z820.sh COPYONLY)
 configure_file(run_hcc_dl580.sh run_hcc_dl580.sh COPYONLY)
 configure_file(run_hcc_dragonhawk.sh run_hcc_dragonhawk.sh COPYONLY)

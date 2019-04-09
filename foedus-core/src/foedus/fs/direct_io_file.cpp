@@ -61,7 +61,7 @@ ErrorCode  DirectIoFile::open(bool read, bool write, bool append, bool create) {
   if (!exists(folder)) {
     if (!create_directories(folder, true)) {
       if (exists(folder)) {
-        LOG(INFO) << "Interesting. other thread has created the folder:" << folder;
+        //LOG(INFO) << "Interesting. other thread has created the folder:" << folder;
       } else {
         LOG(ERROR) << "DirectIoFile::open(): failed to create parent folder: "
           << folder << ". err=" << assorted::os_error();
@@ -70,8 +70,8 @@ ErrorCode  DirectIoFile::open(bool read, bool write, bool append, bool create) {
     }
   }
 
-  LOG(INFO) << "DirectIoFile::open(): opening: " << path_ << "..  read =" << read << " write="
-    << write << ", append=" << append << ", create=" << create;
+  //LOG(INFO) << "DirectIoFile::open(): opening: " << path_ << "..  read =" << read << " write="
+  //  << write << ", append=" << append << ", create=" << create;
   int oflags = O_LARGEFILE;
   if (!emulation_.disable_direct_io_) {
     oflags |= O_DIRECT;
@@ -101,11 +101,11 @@ ErrorCode  DirectIoFile::open(bool read, bool write, bool append, bool create) {
     descriptor_ = ::open(path_.c_str(), oflags ^ O_DIRECT, permissions);
     if (descriptor_ != kInvalidDescriptor) {
       // Okay, O_DIRECT was the cause. Just complain. go on.
-      LOG(WARNING) << "DirectIoFile::open(): O_DIRECT flag for " << path_
-        << " was rejected and automatically removed. This usually means you specified"
-        << " tmpfs, such as /tmp, /dev/shm. Such non-durable devices should be used only"
-        << " for testing and performance experiments."
-        << " Related URL: http://www.gossamer-threads.com/lists/linux/kernel/720702";
+      //LOG(WARNING) << "DirectIoFile::open(): O_DIRECT flag for " << path_
+      //  << " was rejected and automatically removed. This usually means you specified"
+      //  << " tmpfs, such as /tmp, /dev/shm. Such non-durable devices should be used only"
+      //  << " for testing and performance experiments."
+      //  << " Related URL: http://www.gossamer-threads.com/lists/linux/kernel/720702";
     }
     // else the normal error flow below.
   }
@@ -121,7 +121,7 @@ ErrorCode  DirectIoFile::open(bool read, bool write, bool append, bool create) {
     if (append) {
       current_offset_ = file_size(path_);
     }
-    LOG(INFO) << "DirectIoFile::open(): successfully opened. " << *this;
+    //LOG(INFO) << "DirectIoFile::open(): successfully opened. " << *this;
     return kErrorCodeOk;
   }
 }
@@ -129,7 +129,7 @@ ErrorCode  DirectIoFile::open(bool read, bool write, bool append, bool create) {
 bool DirectIoFile::close() {
   if (descriptor_ != kInvalidDescriptor) {
     int ret = ::close(descriptor_);
-    LOG(INFO) << "DirectIoFile::close(): closed. " << *this;
+    //LOG(INFO) << "DirectIoFile::close(): closed. " << *this;
     if (ret != 0) {
       // Error at file close is nasty, we can't do much. We just report it in log.
       LOG(ERROR) << "DirectIoFile::close(): error:" << foedus::assorted::os_error()

@@ -17,7 +17,7 @@ do
   do
     printf ",MOCC (W${whs}) [T${rep}]" >> $OUTFILE
   done
-  for thr in 0 1 2 6 12 16 18 24 32
+  for thr in 2 6 12 16 18 24 32
   do
     if [ $thr -eq 0 ]
     then
@@ -39,16 +39,16 @@ do
 
     printf "\n$total_threads" >> $OUTFILE
 
-    for rep in 1 2 3 4 5
+    for rep in {1..5}
     do
       echo "hcc_policy=$hcc_policy, warehouses=$warehouses, threads=$total_threads, rep=$rep/5..."
       # be careful.
       rm -rf /dev/shm/foedus_tpcc/
       rm -rf /tmp/libfoedus.*
-      sleep 0.1 # Linux's release of shared memory has a bit of timelag.
+      sleep 5 # Linux's release of shared memory has a bit of timelag.
       export CPUPROFILE_FREQUENCY=1 # https://code.google.com/p/gperftools/issues/detail?id=133
-      #echo "./tpcc -warehouses=$warehouses -fork_workers=$fork_workers -nvm_folder=/dev/shm -high_priority=$high_priority -null_log_device=$null_log_device -loggers_per_node=$loggers_per_node -thread_per_node=$thread_per_node -numa_nodes=$numa_nodes -log_buffer_mb=$log_buffer_mb -neworder_remote_percent=1 -payment_remote_percent=15 -volatile_pool_size=$volatile_pool_size -snapshot_pool_size=$snapshot_pool_size -reducer_buffer_size=$reducer_buffer_size -duration_micro=$duration_micro -hcc_policy=$hcc_policy"
-      xput=$(env CPUPROFILE_FREQUENCY=1 ./tpcc -warehouses=$warehouses -take_snapshot=false -fork_workers=$fork_workers -nvm_folder=/dev/shm -high_priority=$high_priority -null_log_device=$null_log_device -loggers_per_node=$loggers_per_node -thread_per_node=$thread_per_node -numa_nodes=$numa_nodes -log_buffer_mb=$log_buffer_mb -neworder_remote_percent=1 -payment_remote_percent=15 -volatile_pool_size=$volatile_pool_size -snapshot_pool_size=$snapshot_pool_size -reducer_buffer_size=$reducer_buffer_size -duration_micro=$duration_micro -hcc_policy=$hcc_policy | grep 'final result:' | grep -oE '<MTPS>[0-9.]+</MTPS>' | grep -oE '[0-9.]+')
+      echo "./tpcc -warehouses=$warehouses -fork_workers=$fork_workers -nvm_folder=/dev/shm -high_priority=$high_priority -null_log_device=$null_log_device -loggers_per_node=$loggers_per_node -thread_per_node=$thread_per_node -numa_nodes=$numa_nodes -log_buffer_mb=$log_buffer_mb -neworder_remote_percent=1 -payment_remote_percent=15 -volatile_pool_size=$volatile_pool_size -snapshot_pool_size=$snapshot_pool_size -reducer_buffer_size=$reducer_buffer_size -duration_micro=$duration_micro -hcc_policy=$hcc_policy"
+      xput=$(env CPUPROFILE_FREQUENCY=1 ./tpcc -warehouses=$warehouses -take_snapshot=false -fork_workers=$fork_workers -nvm_folder=/dev/shm -high_priority=$high_priority -null_log_device=$null_log_device -loggers_per_node=$loggers_per_node -thread_per_node=$thread_per_node -numa_nodes=$numa_nodes -log_buffer_mb=$log_buffer_mb -neworder_remote_percent=1 -payment_remote_percent=15 -volatile_pool_size=$volatile_pool_size -snapshot_pool_size=$snapshot_pool_size -reducer_buffer_size=$reducer_buffer_size -duration_micro=$duration_micro -hcc_policy=$hcc_policy 2>&1 | grep 'final result:' | grep -oE '<MTPS>[0-9.]+</MTPS>' | grep -oE '[0-9.]+')
       #xput="${warehouses}.00"
       printf ",$xput" >> $OUTFILE
     done

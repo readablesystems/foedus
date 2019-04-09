@@ -77,9 +77,12 @@ ErrorCode TpccClientTask::do_neworder(Wid wid) {
     offsetof(DistrictStaticData, tax_)));
 
   // UPDATE DISTRICT SET next_o_id=next_o_id+1
-  Oid oid = 1;
-  CHECK_ERROR_CODE(storages_.districts_next_oid_.increment_record<Oid>(context_, wdid, &oid, 0));
-  ASSERT_ND(oid >= kOrders);
+  //Oid oid = 1;
+  //CHECK_ERROR_CODE(storages_.districts_next_oid_.increment_record<Oid>(context_, wdid, &oid, 0));
+  //ASSERT_ND(oid >= kOrders);
+  const void* noid = nullptr;
+  CHECK_ERROR_CODE(storages_.districts_next_oid_.get_record_payload(context_, wdid, &noid));
+  Oid oid = __sync_fetch_and_add(reinterpret_cast<Oid*>(const_cast<void*>(noid)), 1);
   Wdoid wdoid = combine_wdoid(wdid, oid);
 
   // SELECT DISCOUNT from CUSTOMER

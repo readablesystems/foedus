@@ -9,6 +9,9 @@ high_priority=false # To set this to true, you must add "yourname - rtprio 99" t
 fork_workers=true
 hcc_policy=0
 
+make clean
+make -j
+
 for whs in 1 4 0
 do
   OUTFILE="mocc-${whs}w-results.txt"

@@ -20,7 +20,7 @@ do
   do
     printf ",MOCC (W${whs}) [T${rep}]" >> $OUTFILE
   done
-  for thr in 1 2 6 12 16 18 24 32
+  for thr in 2 6 12 16 18 24 32
   do
     if [ $thr -eq 0 ]
     then

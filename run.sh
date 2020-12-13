@@ -3,7 +3,7 @@
 if [ ! -d build ]; then
 	mkdir build
 	cd build
-	cmake ..
+	cmake .. -DCMAKE_BUILD_TYPE=Release
 	cd ..
 fi
 
